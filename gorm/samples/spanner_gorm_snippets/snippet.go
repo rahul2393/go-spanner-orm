@@ -17,6 +17,9 @@ var (
 	commands = map[string]command{
 		"migrate_model": samples.MigrateModel,
 		"create_record": samples.CreateRecord,
+		"query_record":  samples.QueryRecord,
+		"associations":  samples.Association,
+		"transaction":   samples.Transactions,
 
 		"mysql_migrate_model": samples.MYSQLMigrateModel,
 		"mysql_create_record": samples.MySQLCreateRecord,

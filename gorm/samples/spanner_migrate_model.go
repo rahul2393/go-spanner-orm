@@ -4,15 +4,14 @@ package samples
 
 import (
 	"context"
-	"database/sql"
 	"io"
-	"time"
 
 	"gorm.io/gorm"
 
 	_ "github.com/googleapis/go-sql-spanner"
 
 	spannergorm "github.com/rahul2393/go-spanner-orm/gorm"
+	"github.com/rahul2393/go-spanner-orm/gorm/samples/models"
 )
 
 // CREATE TABLE singers (
@@ -32,17 +31,6 @@ import (
 //
 // CREATE INDEX idx_singers_deleted_at ON singers(deleted_at);
 
-type Singer struct {
-	gorm.Model
-	Name         string
-	Email        string `gorm:"->:false;<-:create"` // createonly (disabled read from db)
-	Age          uint8  `gorm:"<-:update"`          // allow read and update
-	Birthday     *time.Time
-	MemberNumber sql.NullString
-	ActivatedAt  sql.NullTime
-	Songs        []string `gorm:"-"` // ignore this field when write and read with struct
-}
-
 // MigrateModel validates the GORM struct declaration with Spanner and run the migrations
 func MigrateModel(ctx context.Context, w io.Writer, dsn string) error {
 	// dsn := "projects/my-project/instances/my-instance/databases/my-database"
@@ -55,7 +43,7 @@ func MigrateModel(ctx context.Context, w io.Writer, dsn string) error {
 	}
 	// Automatically create the "songs" table based on the `Account`
 	// model.
-	return db.AutoMigrate(&Singer{})
+	return db.AutoMigrate(&models.Singer{}, &models.Song{})
 }
 
 // [END spanner_migrate_model]
